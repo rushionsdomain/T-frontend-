@@ -2,7 +2,7 @@
 import Sidebar from "../components/Sidebar";
 import Stories from "../components/Stories";
 import Feed from "../components/Feed";
-import "../style.css";
+import "./home.css";
 
 const Home = () => {
   return (

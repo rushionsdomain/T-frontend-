@@ -1,28 +1,28 @@
-// src/components/Sidebar.jsx
-import { NavLink } from "react-router-dom";
-import "../style.css";
+// import React from 'react';
+import { Link } from "react-router-dom";
+import "./Sidebar.css"; // Add your styling
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
-      <NavLink to="/" className="nav-item" activeClassName="active">
+      <Link to="/feed" className="sidebarItem">
         🏠 Home
-      </NavLink>
-      <NavLink to="/explore" className="nav-item" activeClassName="active">
+      </Link>
+      <Link to="/explore" className="sidebarItem">
         🔍 Explore
-      </NavLink>
-      <NavLink to="/messages" className="nav-item" activeClassName="active">
-        💬 Messaging
-      </NavLink>
-      <NavLink to="/create" className="nav-item" activeClassName="active">
-        ➕ Create
-      </NavLink>
-      <NavLink to="/profile" className="nav-item" activeClassName="active">
+      </Link>
+      <Link to="/messages" className="sidebarItem">
+        💬 Messages
+      </Link>
+      <Link to="/notifications" className="sidebarItem">
+        🔔 Notifications
+      </Link>
+      <Link to="/create-post" className="sidebarItem">
+        ➕ Create Post
+      </Link>
+      <Link to="/profile" className="sidebarItem">
         👤 Profile
-      </NavLink>
-      <NavLink to="/settings" className="nav-item" activeClassName="active">
-        ⚙️ Settings
-      </NavLink>
+      </Link>
     </div>
   );
 };
