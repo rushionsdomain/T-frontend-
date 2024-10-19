@@ -9,6 +9,7 @@ import Explore from "./pages/Explore";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import Sidebar from "./components/Sidebar"; // Import Sidebar component
 import "./style.css";
 
 const App = () => {
@@ -23,28 +24,68 @@ const App = () => {
   const toggleTheme = () => setIsDarkMode((prevMode) => !prevMode);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/forgot-password" element={<ForgotPassPage />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/explore" element={<Explore />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route
-          path="/settings"
-          element={
-            <Settings
-              user={user}
-              setUser={setUser}
-              toggleTheme={toggleTheme}
-              isDarkMode={isDarkMode}
-            />
-          }
-        />
-      </Routes>
-    </Router>
+    <div className={isDarkMode ? "app dark-mode" : "app"}>
+      <Router>
+        <Routes>
+          {/* Auth routes without sidebar */}
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPassPage />} />
+
+          {/* Routes with sidebar */}
+          <Route
+            path="/home"
+            element={
+              <div className="main-layout">
+                <Sidebar user={user} />
+                <Home />
+              </div>
+            }
+          />
+          <Route
+            path="/explore"
+            element={
+              <div className="main-layout">
+                <Sidebar user={user} />
+                <Explore />
+              </div>
+            }
+          />
+          <Route
+            path="/messages"
+            element={
+              <div className="main-layout">
+                <Sidebar user={user} />
+                <Messages />
+              </div>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <div className="main-layout">
+                <Sidebar user={user} />
+                <Profile user={user} setUser={setUser} />
+              </div>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <div className="main-layout">
+                <Sidebar user={user} />
+                <Settings
+                  user={user}
+                  setUser={setUser}
+                  toggleTheme={toggleTheme}
+                  isDarkMode={isDarkMode}
+                />
+              </div>
+            }
+          />
+        </Routes>
+      </Router>
+    </div>
   );
 };
 

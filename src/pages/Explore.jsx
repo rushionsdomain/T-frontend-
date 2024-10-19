@@ -1,4 +1,3 @@
-// src/pages/Explore.jsx
 import { useState } from "react";
 import "../style.css";
 
@@ -7,16 +6,43 @@ const Explore = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
 
-  // Sample data for demonstration (You can replace this with actual data)
+  // Sample data for demonstration (URLs of images)
   const data = [
-    "Photography",
-    "Travel",
-    "Food",
-    "Technology",
-    "Fashion",
-    "Sports",
-    "Music",
-    "Movies",import
+    {
+      id: 1,
+      title: "iPhone",
+      url: "https://via.placeholder.com/300x300?text=Post+1",
+    },
+    {
+      id: 2,
+      title: "Tech",
+      url: "https://via.placeholder.com/300x300?text=Post+2",
+    },
+    {
+      id: 3,
+      title: "City",
+      url: "https://via.placeholder.com/300x300?text=Post+3",
+    },
+    {
+      id: 4,
+      title: "Cats",
+      url: "https://via.placeholder.com/300x300?text=Post+4",
+    },
+    {
+      id: 5,
+      title: "Phone",
+      url: "https://via.placeholder.com/300x300?text=Post+5",
+    },
+    {
+      id: 6,
+      title: "Magic",
+      url: "https://via.placeholder.com/300x300?text=Post+6",
+    },
+    {
+      id: 7,
+      title: "Cute",
+      url: "https://via.placeholder.com/300x300?text=Post+7",
+    },
   ];
 
   // Function to handle search input change
@@ -26,7 +52,7 @@ const Explore = () => {
     // Filter the data based on the search term
     if (value) {
       const filteredResults = data.filter((item) =>
-        item.toLowerCase().includes(value.toLowerCase())
+        item.title.toLowerCase().includes(value.toLowerCase())
       );
       setResults(filteredResults);
     } else {
@@ -34,12 +60,12 @@ const Explore = () => {
     }
   };
 
+  // Choose the display data, either filtered results or original data
+  const displayData = results.length > 0 ? results : data;
+
   return (
     <div className="explore">
       <h2>Explore</h2>
-      <p>Discover new things here!</p>
-
-      {/* Search Bar */}
       <input
         type="text"
         placeholder="Search..."
@@ -48,14 +74,14 @@ const Explore = () => {
         className="search-input"
       />
 
-      {/* Display Search Results */}
-      {results.length > 0 && (
-        <ul className="search-results">
-          {results.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      )}
+      {/* Grid for displaying posts */}
+      <div className="explore-grid">
+        {displayData.map((item) => (
+          <div key={item.id} className="explore-item">
+            <img src={item.url} alt={item.title} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
