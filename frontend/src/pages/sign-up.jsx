@@ -1,44 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
-import { doesUsernameExist } from '../services/firebase';
-import { addDoc, collection, getFirestore, serverTimestamp } from 'firebase/firestore';
-import { firebaseApp } from '../lib/firebase';
-import * as ROUTES from '../constants/routes';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
+import { doesUsernameExist } from "../services/firebase";
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp,
+} from "firebase/firestore";
+import { firebaseApp } from "../lib/firebase";
+import * as ROUTES from "../constants/routes";
 
 const db = getFirestore(firebaseApp);
 function SignUp() {
   const navigate = useNavigate();
-  const [emailAddress, setEmailAddress] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [username, setUsername] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const auth = getAuth();
   const isInvalid =
-    password === '' ||
-    emailAddress === '' ||
-    fullName === '' ||
-    username === '' ||
-    confirmPassword === '';
+    password === "" ||
+    emailAddress === "" ||
+    fullName === "" ||
+    username === "" ||
+    confirmPassword === "";
 
   const handleSignUp = async (event) => {
     event.preventDefault();
     const usernameExists = await doesUsernameExist(username);
     if (password !== confirmPassword) {
-      setError('Passwords Donot Match.');
-      setPassword('');
-      setConfirmPassword('');
+      setError("Passwords Donot Match.");
+      setPassword("");
+      setConfirmPassword("");
       setLoading(false);
     } else if (!/^[A-Za-z ]+$/.test(fullName)) {
-      setError('Invalid Name.');
-      setFullName('');
+      setError("Invalid Name.");
+      setFullName("");
       setLoading(false);
     } else if (username.length > 10) {
-      setError('Username can be maximum of 10 characters.');
-      setUsername('');
+      setError("Username can be maximum of 10 characters.");
+      setUsername("");
       setLoading(false);
     } else if (!usernameExists.length) {
       try {
@@ -48,9 +57,9 @@ function SignUp() {
           password
         );
         await updateProfile(createdUserResult.user, {
-          displayName: username
+          displayName: username,
         });
-        await addDoc(collection(db, 'users'), {
+        await addDoc(collection(db, "users"), {
           userId: createdUserResult.user.uid,
           username: username.toLowerCase(),
           fullName,
@@ -58,51 +67,53 @@ function SignUp() {
           following: [],
           followers: [],
           dateCreated: Date.now(),
-          image: '/images/default.png',
-          bio: '',
-          lastSeen: serverTimestamp()
+          image: "/images/default.png",
+          bio: "",
+          lastSeen: serverTimestamp(),
         });
         navigate(ROUTES.LOGIN);
       } catch (error) {
         if (error) setLoading(false);
-        if (error.code === 'auth/email-already-exists') {
-          setError('Email already exists.');
-          setEmailAddress('');
-          setPassword('');
-          setConfirmPassword('');
-        } else if (error.code === 'auth/invalid-email') {
-          setError('Invalid Email. Please check.');
-          setEmailAddress('');
-          setPassword('');
-          setConfirmPassword('');
-        } else if (error.code === 'auth/invalid-display-name') {
-          setError("Invalid Username. Only alphanumeric characters and '_' and '.' are allowed.");
-          setUsername('');
-        } else if (error.code === 'auth/invalid-password') {
-          setError('Invalid Password. Must be atleast 6 characters.');
-          setPassword('');
-          setConfirmPassword('');
-        } else if (error.code === 'auth/weak-password') {
-          setError('Choose a stronger password.');
-          setPassword('');
-          setConfirmPassword('');
+        if (error.code === "auth/email-already-exists") {
+          setError("Email already exists.");
+          setEmailAddress("");
+          setPassword("");
+          setConfirmPassword("");
+        } else if (error.code === "auth/invalid-email") {
+          setError("Invalid Email. Please check.");
+          setEmailAddress("");
+          setPassword("");
+          setConfirmPassword("");
+        } else if (error.code === "auth/invalid-display-name") {
+          setError(
+            "Invalid Username. Only alphanumeric characters and '_' and '.' are allowed."
+          );
+          setUsername("");
+        } else if (error.code === "auth/invalid-password") {
+          setError("Invalid Password. Must be atleast 6 characters.");
+          setPassword("");
+          setConfirmPassword("");
+        } else if (error.code === "auth/weak-password") {
+          setError("Choose a stronger password.");
+          setPassword("");
+          setConfirmPassword("");
         } else {
           setError(error.code);
-          setFullName('');
-          setEmailAddress('');
-          setPassword('');
-          setConfirmPassword('');
-          setUsername('');
+          setFullName("");
+          setEmailAddress("");
+          setPassword("");
+          setConfirmPassword("");
+          setUsername("");
         }
       }
     } else {
-      setUsername('');
+      setUsername("");
       setLoading(false);
-      setError('Username already exists. Please choose another one');
+      setError("Username already exists. Please choose another one");
     }
   };
   useEffect(() => {
-    document.title = 'Sign Up - Instagram 2.0';
+    document.title = "Sign Up - Instagram 2.0";
   }, []);
 
   return (
@@ -110,7 +121,11 @@ function SignUp() {
       <div>
         <div className="top-grid my-3 p-[24px]">
           <h1 className="-mx-16 flex w-full justify-center ">
-            <img src="/images/logo.png" alt="Instagram Logo" className="mt-4 mb-4 w-48 " />
+            <img
+              src="/images/logo.png"
+              alt="Instagram Logo"
+              className="mb-4 mt-4 w-48 "
+            />
           </h1>
           <h1 className="flex justify-center text-center ">
             <p className="mb-8 text-[22px] font-semibold text-gray-400 ">
@@ -180,12 +195,12 @@ function SignUp() {
               value={confirmPassword}
             />
             <button
-              className={`submit ${isInvalid && ' bg-opacity-40'}`}
+              className={`submit ${isInvalid && " bg-opacity-40"}`}
               disabled={isInvalid === true}
               type="submit"
               onClick={() => setLoading(true)}
             >
-              {loading ? 'Creating Your Account' : 'Sign Up'}
+              {loading ? "Creating Your Account" : "Sign Up"}
             </button>
           </form>
         </div>
